@@ -46,7 +46,7 @@ func Merge(in1, in2 <-chan int) <-chan int {
 		v1, ok1 := <-in1
 		v2, ok2 := <-in2
 		for ok1 || ok2 {
-			if !ok2 || ok1 {
+			if !ok2 || (ok1 && v1 <= v2) {
 				out <- v1
 				v1, ok1 = <-in1
 			} else {
