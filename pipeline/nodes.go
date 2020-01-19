@@ -7,6 +7,7 @@ package pipeline
 import (
 	"encoding/binary"
 	"io"
+	"math/rand"
 	"sort"
 )
 
@@ -61,7 +62,28 @@ func Merge(in1, in2 <-chan int) <-chan int {
 	return out
 }
 
-//读数据
+//随机生成count个随机数放入到channel中
+func RandomSource(count int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for i := 0; i < count; i++ {
+			out <- rand.Int()
+		}
+		close(out)
+	}()
+	return out
+}
+
+//将channel里的数据写入
+func WriteSink(writer io.Writer, in <-chan int) {
+	for v := range in {
+		buffer := make([]byte, 8)
+		binary.BigEndian.PutUint64(buffer, uint64(v))
+		writer.Write(buffer)
+	}
+}
+
+//读取io里的数据
 func ReaderSource(reader io.Reader) <-chan int {
 	out := make(chan int)
 	go func() {
@@ -79,5 +101,4 @@ func ReaderSource(reader io.Reader) <-chan int {
 		close(out)
 	}()
 	return out
-
 }
