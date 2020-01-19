@@ -84,21 +84,32 @@ func WriteSink(writer io.Writer, in <-chan int) {
 }
 
 //读取io里的数据
-func ReaderSource(reader io.Reader) <-chan int {
+func ReaderSource(reader io.Reader, chunkSize int) <-chan int {
 	out := make(chan int)
 	go func() {
 		buffer := make([]byte, 8)
+		bytesRead := 0
 		for {
 			n, err := reader.Read(buffer)
+			bytesRead += n
 			if n > 0 {
 				v := int(binary.BigEndian.Uint64(buffer))
 				out <- v
 			}
-			if err != nil {
+			if err != nil || (chunkSize != -1 && bytesRead >= chunkSize) {
 				break
 			}
 		}
 		close(out)
 	}()
 	return out
+}
+
+func MergeN(inputs ...<-chan int) <-chan int {
+	if len(inputs) == 1 {
+		return inputs[0]
+	}
+
+	m := len(inputs) / 2
+	return Merge(MergeN(inputs[:m]...), MergeN(inputs[m:]...))
 }

@@ -34,7 +34,7 @@ func main() {
 	defer file.Close()
 
 	//读取文件
-	p = pipeline.ReaderSource(bufio.NewReader(file))
+	p = pipeline.ReaderSource(bufio.NewReader(file), -1)
 	count := 0
 	for v := range p {
 		fmt.Println(v)
