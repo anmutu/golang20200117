@@ -5,6 +5,8 @@
 package pipeline
 
 import (
+	"encoding/binary"
+	"io"
 	"sort"
 )
 
@@ -57,4 +59,25 @@ func Merge(in1, in2 <-chan int) <-chan int {
 		close(out) //我关了，你别再发了
 	}()
 	return out
+}
+
+//读数据
+func ReaderSource(reader io.Reader) <-chan int {
+	out := make(chan int)
+	go func() {
+		buffer := make([]byte, 8)
+		for {
+			n, err := reader.Read(buffer)
+			if n > 0 {
+				v := int(binary.BigEndian.Uint64(buffer))
+				out <- v
+			}
+			if err != nil {
+				break
+			}
+		}
+		close(out)
+	}()
+	return out
+
 }
