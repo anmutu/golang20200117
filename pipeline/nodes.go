@@ -6,10 +6,18 @@ package pipeline
 
 import (
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math/rand"
 	"sort"
+	"time"
 )
+
+var startTime time.Time
+
+func InitStartTime() {
+	startTime = time.Now()
+}
 
 //其中"<-"表示只能出东西，表示输出。
 func ArraySource(a ...int) <-chan int {
@@ -31,12 +39,18 @@ func InMemSort(in <-chan int) <-chan int {
 		for v := range in {
 			a = append(a, v)
 		}
+		fmt.Println("读取内存用时：", startTime.Sub(time.Now()))
+
 		//排序
 		sort.Ints(a)
+		fmt.Println("排序用时：", startTime.Sub(time.Now()))
+
 		//输出
 		for _, v := range a {
 			out <- v
 		}
+		fmt.Println("排序用时：", startTime.Sub(time.Now()))
+
 		close(out)
 	}()
 	return out
@@ -57,6 +71,7 @@ func Merge(in1, in2 <-chan int) <-chan int {
 				v2, ok2 = <-in2
 			}
 		}
+		fmt.Println("Merge排序用时：", startTime.Sub(time.Now()))
 		close(out) //我关了，你别再发了
 	}()
 	return out
