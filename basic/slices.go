@@ -12,6 +12,7 @@ func main() {
 	extendingSlices()
 	append2Slices()
 	createSlices()
+	copyDelPop()
 }
 
 //切片取值
@@ -84,6 +85,27 @@ func createSlices() {
 
 func copyDelPop() {
 	fmt.Println("进入copyDelPop()函数")
+	s1 := make([]int, 10, 32)
+	s2 := []int{0, 1, 2, 3}
+	printSlices(s1)
+	printSlices(s2)
+	fmt.Println("将s2copy到s1的结果为：")
+	copy(s1, s2)
+	printSlices(s1)
+	//把现在下标为3的数值delete掉
+	fmt.Println("将下标为3的delete掉的结果为：")
+	s2 = append(s1[:3], s1[4:]...)
+	printSlices(s1)
+	fmt.Println("从头pop一个数据出去：")
+	front := s1[0]
+	s1 = s1[1:]
+	fmt.Printf("pop出去的头的数值为:%v,pop后的结果为:%v", front, s1)
+	printSlices(s1)
+	fmt.Println("从尾部pop一个数据出去：")
+	tail := s1[len(s1)-1]
+	s1 = s1[:len(s1)-1]
+	fmt.Printf("pop出去的尾部的数值为:%v,pop后的结果为:%v", tail, s1)
+	printSlices(s1)
 }
 
 func printSlices(s []int) {
