@@ -9,7 +9,7 @@ import (
 	"regexp"
 )
 
-const text = "my email is gdsz@xxy.com.may i have ur email? my email is hbdw@du.com and i think u can have my wechat."
+const text = "my email is szu@xxy.com. may i have ur email? my email is hbdw@du.com and i think u can have my wechat."
 
 //"."是匹配任何一个字符
 //"+"就是一个或者多个
@@ -21,6 +21,8 @@ func main() {
 	simpleMatch1()
 	firstEmailMatch()
 	allEmailMatch()
+	subMatch()
+	subMatch1()
 }
 
 func simpleMatch() {
@@ -45,4 +47,19 @@ func allEmailMatch() {
 	re := regexp.MustCompile(`[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+`)
 	match := re.FindAllString(text, -1)
 	fmt.Println("文本里所有的电子邮箱有:", match)
+}
+
+func subMatch() {
+	re := regexp.MustCompile(`[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+`)
+	match := re.FindAllString(text, -1)
+	fmt.Println(match)
+
+}
+
+func subMatch1() {
+	re := regexp.MustCompile(`([a-zA-Z0-9]+)@([a-zA-Z0-9]+)\.([a-zA-Z0-9]+)`)
+	match := re.FindAllStringSubmatch(text, -1)
+	for _, m := range match {
+		fmt.Println("切割提取的情况是:", m)
+	}
 }
