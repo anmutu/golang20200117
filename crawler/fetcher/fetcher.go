@@ -2,7 +2,7 @@
   author='du'
   date='2020/1/23 20:21'
 */
-package main
+package fetcher
 
 import (
 	"bufio"
@@ -16,6 +16,7 @@ import (
 	"net/http"
 )
 
+//从网络拿取数据的函数
 func Fetch(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
