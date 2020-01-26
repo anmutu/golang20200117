@@ -9,7 +9,9 @@ import (
 	"log"
 )
 
-func Run(seeds ...Request) {
+type SimpleEngine struct{}
+
+func (e SimpleEngine) Run(seeds ...Request) {
 	var requests []Request
 	for _, r := range seeds {
 		requests = append(requests, r)
@@ -26,7 +28,7 @@ func Run(seeds ...Request) {
 		//	continue
 		//}
 		//parseResult := r.ParserFunc(body)
-		parseResult, err := worker(r)
+		parseResult, err := e.worker(r)
 		if err != nil {
 			continue
 		}
@@ -38,7 +40,8 @@ func Run(seeds ...Request) {
 	}
 }
 
-func worker(r Request) (ParseResult, error) {
+//将fetch的动作提取成work成work函数。
+func (SimpleEngine) worker(r Request) (ParseResult, error) {
 	log.Printf("fetching %s", r.Url)
 	body, err := fetcher.Fetch(r.Url)
 	if err != nil {
