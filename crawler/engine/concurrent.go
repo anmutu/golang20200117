@@ -8,7 +8,6 @@
 package engine
 
 import (
-	"golang.org/x/tools/go/ssa/interp/testdata/src/fmt"
 	"golang20200117/crawler/fetcher"
 	"log"
 )
@@ -20,38 +19,40 @@ type ConcurrentEngine struct {
 
 type Scheduler interface {
 	Submit(Request)
+	ConfigerMsaterWorkerChan(chan Request)
 }
 
-func (e ConcurrentEngine) Run(seeds ...Request) {
-	for _, r := range seeds {
-		e.Scheduler.Submit(r)
-	}
-
+func (e *ConcurrentEngine) Run(seeds ...Request) {
 	//目前所有的worker共用一个输入
 	in := make(chan Request)
 	out := make(chan ParseResult)
+	e.Scheduler.ConfigerMsaterWorkerChan(in)
 
 	//建worker
 	for i := 0; i < e.WorkerCount; i++ {
 		createWorker(in, out)
 	}
 
+	for _, r := range seeds {
+		e.Scheduler.Submit(r)
+	}
+
 	//要收out
 	for {
 		result := <-out
 		for _, item := range result.Items {
-			fmt.Printf("得到item:%v", item)
+			log.Printf("得到item:%v\n", item)
 		}
 
 		//把所有的result送给scheduler
 		for _, request := range result.Requests {
 			e.Scheduler.Submit(request)
 		}
-
 	}
 
 }
 
+//创建worker
 func createWorker(in chan Request, out chan ParseResult) {
 	go func() {
 		for {

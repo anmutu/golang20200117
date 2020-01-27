@@ -8,17 +8,42 @@ import (
 	"fmt"
 	"golang20200117/crawler/cnblogs/parser"
 	"golang20200117/crawler/engine"
+	"golang20200117/crawler/scheduler"
 	"io/ioutil"
 	"net/http"
 	"regexp"
 )
 
 func main() {
-	engine.Run(engine.Request{
+	concurrentBlogList()
+	//blogList()
+}
+
+//func blogList(){
+//	engine.SimpleEngine.Run(engine.Request{
+//		Url:        "https://www.cnblogs.com",
+//		ParserFunc: parser.ParseBlogList,
+//	})
+//}
+
+func concurrentBlogList() {
+	e := engine.ConcurrentEngine{
+		Scheduler:   &scheduler.SimpleScheduler{},
+		WorkerCount: 10,
+	}
+
+	e.Run(engine.Request{
 		Url:        "https://www.cnblogs.com",
 		ParserFunc: parser.ParseBlogList,
 	})
 }
+
+//func excellentUser(){
+//	engine.Run(engine.Request{
+//		Url:"https://www.cnblogs.com",
+//		ParserFunc:parser.ParseExcellentUser,
+//	})
+//}
 
 func cnblogsTest() {
 	resp, err := http.Get("https://www.cnblogs.com")
