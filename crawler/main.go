@@ -26,17 +26,42 @@ func main() {
 //	})
 //}
 
+//func concurrentBlogList() {
+//	e := engine.ConcurrentEngine{
+//		Scheduler:   &scheduler.SimpleScheduler{},
+//		WorkerCount: 10,
+//	}
+//
+//	e.Run(engine.Request{
+//		Url:        "https://www.cnblogs.com",
+//		ParserFunc: parser.ParseBlogList,
+//	})
+//}
+
 func concurrentBlogList() {
 	e := engine.ConcurrentEngine{
-		Scheduler:   &scheduler.SimpleScheduler{},
+		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 10,
 	}
-
 	e.Run(engine.Request{
 		Url:        "https://www.cnblogs.com",
 		ParserFunc: parser.ParseBlogList,
 	})
 }
+
+func concurrentBlogList1() {
+	e := engine.ConcurrentEngine{
+		Scheduler:   &scheduler.QueuedScheduler{},
+		WorkerCount: 10,
+	}
+
+	e.Run(engine.Request{
+		Url:        "https://www.cnblogs.com",
+		ParserFunc: parser.ParseNextBlogs,
+	})
+}
+
+//<a href="/sitehome/p/2" class="p_2 current" onclick="aggSite.loadCategoryPostList(2,20);buildPaging(2);return false;">2</a>
 
 //func excellentUser(){
 //	engine.Run(engine.Request{
