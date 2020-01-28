@@ -13,8 +13,8 @@ import (
 )
 
 type ConcurrentEngine struct {
-	Scheduler   Scheduler
-	WorkerCount int
+	Scheduler   Scheduler //用来调度
+	WorkerCount int       //worker的数量
 }
 
 type Scheduler interface {
@@ -58,11 +58,10 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	}
 }
 
-//创建worker
+//创建worker，简单调度器
 func createWorker(in chan Request, out chan ParseResult) {
 	go func() {
 		for {
-			//可优化处：得在这里跟scheduler说我准备好了，然后才收数据，见newCreateWorker()函数。
 			request := <-in
 			result, err := worker(request)
 			if err != nil {
