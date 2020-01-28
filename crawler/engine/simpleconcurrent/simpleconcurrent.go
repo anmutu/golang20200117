@@ -5,27 +5,36 @@
 package simpleconcurrent
 
 import (
-	"golang.org/x/tools/go/ssa/interp/testdata/src/fmt"
+	"fmt"
 	"golang20200117/crawler/engine"
 )
 
 //简单调度器,
 
 type SimpleConcurrentEngine struct {
-	Scheduler Scheduler
-	WorkCount int
+	Scheduler   Scheduler
+	WorkerCount int
 }
 
 type Scheduler interface {
 	Submit(engine.Request)
+	ConfigerMasterWorkerChan(chan engine.Request)
 }
 
 //这里是所有的worker共用一个输入
-func (e SimpleConcurrentEngine) Run(seeds ...engine.Request) {
+func (e *SimpleConcurrentEngine) Run(seeds ...engine.Request) {
 	in := make(chan engine.Request)
 	out := make(chan engine.ParseResult)
-	for i := 0; i < e.WorkCount; i++ {
+
+	//把in给到workerChan
+	e.Scheduler.ConfigerMasterWorkerChan(in)
+	for i := 0; i < e.WorkerCount; i++ {
 		createWorker(in, out)
+	}
+
+	for _, r := range seeds {
+		//把request送进workerChan
+		e.Scheduler.Submit(r)
 	}
 
 	for {
@@ -33,7 +42,7 @@ func (e SimpleConcurrentEngine) Run(seeds ...engine.Request) {
 
 		//将拿到的值打印出来
 		for _, item := range result.Items {
-			fmt.Printf("拿到item的值是%s:", item)
+			fmt.Printf("拿到item的值是%s:\n", item)
 		}
 
 		//将拿到的seed给到scheduler去提交
