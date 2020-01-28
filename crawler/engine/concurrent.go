@@ -77,7 +77,6 @@ func newCreateWorker(out chan ParseResult, s Scheduler) {
 	in := make(chan Request)
 	go func() {
 		for {
-			//TODO 得在这里跟scheduler说我准备好了，然后才收数据
 			s.WorkerReady(in)
 			request := <-in
 			result, err := worker(request)

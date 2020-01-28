@@ -7,7 +7,6 @@ package persist
 import (
 	"context"
 	"github.com/olivere/elastic/v7"
-	"golang.org/x/tools/go/ssa/interp/testdata/src/fmt"
 	"log"
 )
 
@@ -18,16 +17,19 @@ func ItemSaver() chan interface{} {
 		for {
 			item := <-out
 			log.Printf("ItemSaver得到#%d,%v", itemCount, item)
-			save(item)
+			_, err := save(item)
+			if err != nil {
+				log.Printf("ItemSaver:存储%v时出错，错误为%v", item, err)
+			}
 		}
 	}()
 	return out
 }
 
-func save(item interface{}) {
+func save(item interface{}) (id string, err error) {
 	client, err := elastic.NewClient(elastic.SetSniff(false))
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	//这里的index就是增加， 不是add，也不是create。
 	resp, err := client.Index().
@@ -36,7 +38,7 @@ func save(item interface{}) {
 		BodyJson(item).
 		Do(context.Background())
 	if err != nil {
-		panic(err)
+		return "", err
 	}
-	fmt.Println(resp)
+	return resp.Id, nil
 }
