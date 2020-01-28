@@ -10,6 +10,7 @@ type Request struct {
 	ParserFunc func([]byte) ParseResult
 }
 
+//返回的结构体，其中"interface{}"表示任何表示任何类型，有点类似c#里的泛型T
 type ParseResult struct {
 	Requests []Request
 	Items    []interface{}

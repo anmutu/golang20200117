@@ -5,17 +5,14 @@
 package main
 
 import (
-	"fmt"
 	"golang20200117/crawler/cnblogs/parser"
 	"golang20200117/crawler/engine"
 	"golang20200117/crawler/scheduler"
-	"io/ioutil"
-	"net/http"
-	"regexp"
 )
 
 func main() {
-	concurrentBlogList()
+	singleTask()
+	//concurrentBlogList()
 }
 
 func concurrentBlogList() {
@@ -23,6 +20,15 @@ func concurrentBlogList() {
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 10,
 	}
+	e.Run(engine.Request{
+		Url:        "https://www.cnblogs.com",
+		ParserFunc: parser.ParseBlogList,
+	})
+}
+
+//单任务版本爬虫
+func singleTask() {
+	e := engine.SimpleEngine{}
 	e.Run(engine.Request{
 		Url:        "https://www.cnblogs.com",
 		ParserFunc: parser.ParseBlogList,

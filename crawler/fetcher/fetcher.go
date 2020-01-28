@@ -16,7 +16,7 @@ import (
 	"net/http"
 )
 
-//从网络拿取数据的函数
+//从网络拿取数据的函数，也就是网页的内容
 func Fetch(url string) ([]byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -35,8 +35,7 @@ func Fetch(url string) ([]byte, error) {
 	return ioutil.ReadAll(utf8Reader)
 }
 
-func determineEncoding(
-	r *bufio.Reader) encoding.Encoding {
+func determineEncoding(r *bufio.Reader) encoding.Encoding {
 	bytes, err := r.Peek(1024)
 	if err != nil {
 		log.Printf("Fetcher error: %v", err)
