@@ -9,7 +9,9 @@ import (
 	"log"
 )
 
-//将fetch的动作提取成work成work函数。
+//这里是将fetcher有网上获取内容的方法和parse将内容解析的方法合并成一个Worker函数。
+
+//传入Request,返回ParseRequest.
 func Worker(r Request) (ParseResult, error) {
 	log.Printf("fetching %s", r.Url)
 	body, err := fetcher.Fetch(r.Url)

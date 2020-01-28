@@ -16,6 +16,9 @@ import (
 	"net/http"
 )
 
+//fetcher的作用就是向网络拿取网页内容。
+//也就是下面的Fetch函数，给个Url,返回网页內容。
+
 //从网络拿取数据的函数，也就是网页的内容
 func Fetch(url string) ([]byte, error) {
 	resp, err := http.Get(url)

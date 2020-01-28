@@ -9,19 +9,19 @@ import (
 	"golang20200117/crawler/engine"
 )
 
-//简单调度器,
+//简单调度器
 
 type SimpleConcurrentEngine struct {
-	Scheduler   Scheduler
-	WorkerCount int
+	Scheduler   Scheduler //调度器
+	WorkerCount int       //worker的数量
 }
 
 type Scheduler interface {
-	Submit(engine.Request)
-	ConfigerMasterWorkerChan(chan engine.Request)
+	Submit(engine.Request)                        //用于将Request送给worker
+	ConfigerMasterWorkerChan(chan engine.Request) //配置workChan,实现也就是个赋值操作。
 }
 
-//这里是所有的worker共用一个输入
+//这里是所有的worker共用一个输入，但是会有多个去处理送过来的输入。
 func (e *SimpleConcurrentEngine) Run(seeds ...engine.Request) {
 	in := make(chan engine.Request)
 	out := make(chan engine.ParseResult)
@@ -53,6 +53,7 @@ func (e *SimpleConcurrentEngine) Run(seeds ...engine.Request) {
 
 }
 
+//创建worker，传入Request的channel和
 func createWorker(in chan engine.Request, out chan engine.ParseResult) {
 	go func() {
 		for {

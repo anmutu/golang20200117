@@ -37,7 +37,6 @@ func (e SimpleEngine) Run(seeds ...Request) {
 	}
 }
 
-//将fetch的动作提取成work成work函数。
 //传入Request结构体，返回ParseResult。
 func (SimpleEngine) worker(r Request) (ParseResult, error) {
 	log.Printf("fetching %s", r.Url)
