@@ -13,8 +13,9 @@ import (
 )
 
 type ConcurrentEngine struct {
-	Scheduler   Scheduler //用来调度
-	WorkerCount int       //worker的数量
+	Scheduler    Scheduler        //用来调度
+	WorkerCount  int              //worker的数量
+	SaveItemChan chan interface{} //item的channel，用于存储数据
 }
 
 type Scheduler interface {
@@ -49,6 +50,8 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 		for _, item := range result.Items {
 			log.Printf("得到#%d ,item:%v\n", itemCount, item)
 			itemCount++
+			//在这里将拿到的items放到SaveItemChan里
+			go func() { e.SaveItemChan <- item }()
 		}
 
 		//把所有的result送给scheduler
