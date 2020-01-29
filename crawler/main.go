@@ -13,9 +13,9 @@ import (
 )
 
 func main() {
-	simpleConcurrent()
+	//simpleConcurrent()
 	//singleTask()
-	//concurrentBlogList()
+	concurrentBlogList()
 }
 
 func concurrentBlogList() {
