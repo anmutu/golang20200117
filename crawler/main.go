@@ -8,6 +8,7 @@ import (
 	"golang20200117/crawler/cnblogs/parser"
 	"golang20200117/crawler/engine"
 	"golang20200117/crawler/engine/simpleconcurrent"
+	"golang20200117/crawler/persist"
 	"golang20200117/crawler/scheduler"
 	"golang20200117/crawler/scheduler/simplescheduler"
 )
@@ -20,8 +21,9 @@ func main() {
 
 func concurrentBlogList() {
 	e := engine.ConcurrentEngine{
-		Scheduler:   &scheduler.QueuedScheduler{},
-		WorkerCount: 10,
+		Scheduler:    &scheduler.QueuedScheduler{},
+		WorkerCount:  10,
+		SaveItemChan: persist.ItemSaver(),
 	}
 	e.Run(engine.Request{
 		Url:        "https://www.cnblogs.com",
