@@ -6,13 +6,16 @@ package main
 
 import (
 	"fmt"
+	"golang20200117/crawler/cnblogs/parser"
+	"golang20200117/crawler/engine"
 	"io/ioutil"
 	"net/http"
 	"regexp"
 )
 
 func main() {
-	cnblogsTest()
+	profileList()
+	//cnblogsTest()
 }
 
 func cnblogsTest() {
@@ -44,4 +47,12 @@ func printBlogList(contents []byte) {
 		fmt.Printf("%s\n", m)
 	}
 	fmt.Println(len(mathes))
+}
+
+func profileList() {
+	e := engine.SimpleEngine{}
+	e.Run(engine.Request{
+		Url:        "https://www.cnblogs.com",
+		ParserFunc: parser.ParseProfileList,
+	})
 }

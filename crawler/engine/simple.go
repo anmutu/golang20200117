@@ -32,7 +32,7 @@ func (e SimpleEngine) Run(seeds ...Request) {
 		requests = append(requests, parseResult.Requests...) //注意这三个.的语法。
 
 		for _, item := range parseResult.Items {
-			log.Printf("得到itme:%s", item)
+			log.Printf("得到item:%s", item)
 		}
 	}
 }
@@ -41,6 +41,7 @@ func (e SimpleEngine) Run(seeds ...Request) {
 func (SimpleEngine) worker(r Request) (ParseResult, error) {
 	log.Printf("fetching %s", r.Url)
 	body, err := fetcher.Fetch(r.Url)
+	log.Printf("%s", body)
 	if err != nil {
 		//如果requests里有就一直请求，如果其中有错，注意不要panic,要纪录日志。
 		log.Printf("Fetcher失败，fetch的url是%s:,错误信息是:%v", r.Url, err)
