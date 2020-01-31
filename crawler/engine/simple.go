@@ -27,6 +27,8 @@ func (e SimpleEngine) Run(seeds ...Request) {
 
 		parseResult, err := e.worker(r)
 		if err != nil {
+			log.Printf("遇到error:%s,此时parseResult的request是%v,items是%v",
+				err, parseResult.Requests, parseResult.Items)
 			continue
 		}
 		requests = append(requests, parseResult.Requests...) //注意这三个.的语法。
@@ -41,12 +43,13 @@ func (e SimpleEngine) Run(seeds ...Request) {
 func (SimpleEngine) worker(r Request) (ParseResult, error) {
 	log.Printf("fetching %s", r.Url)
 	body, err := fetcher.Fetch(r.Url)
-	log.Printf("%s", body)
+	//log.Printf("%s", body)
 	if err != nil {
 		//如果requests里有就一直请求，如果其中有错，注意不要panic,要纪录日志。
 		log.Printf("Fetcher失败，fetch的url是%s:,错误信息是:%v", r.Url, err)
 		return ParseResult{}, err
 	}
 	parseResult := r.ParserFunc(body)
+
 	return parseResult, nil
 }
