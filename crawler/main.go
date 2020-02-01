@@ -5,9 +5,9 @@
 package main
 
 import (
-	"golang20200117/crawler/cnblogs/parser"
 	"golang20200117/crawler/engine"
 	"golang20200117/crawler/engine/simpleconcurrent"
+	"golang20200117/crawler/parser"
 	"golang20200117/crawler/persist"
 	"golang20200117/crawler/scheduler"
 	"golang20200117/crawler/scheduler/simplescheduler"

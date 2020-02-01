@@ -2,9 +2,10 @@
   author='du'
   date='2020/1/25 17:05'
 */
-package parser
+package cnblogs
 
 import (
+	"golang20200117/crawler/parser"
 	"io/ioutil"
 	"testing"
 )
@@ -15,7 +16,7 @@ func TestParseBlogList(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	res := ParseBlogList(contents)
+	res := parser.ParseBlogList(contents)
 	//fmt.Printf("%s",contents)
 	const resultSize = 15
 	if len(res.Requests) != resultSize {

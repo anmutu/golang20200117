@@ -2,7 +2,7 @@
   author='du'
   date='2020/1/29 22:45'
 */
-package parser
+package cnblogs
 
 import (
 	"golang20200117/crawler/engine"
@@ -22,7 +22,7 @@ func ParseProfileList(contents []byte) engine.ParseResult {
 	for _, m := range matches {
 		requestUrl := preSeedUrl + strconv.Itoa(index)
 		result.Items = append(result.Items, string(m[1])+" "+string(m[2]))
-		result.Requests = append(result.Requests, engine.Request{Url: requestUrl, ParserFunc: engine.NilParser})
+		result.Requests = append(result.Requests, engine.Request{Url: requestUrl, ParserFunc: ParseProfileList})
 		index++
 	}
 	return result

@@ -2,7 +2,7 @@
   author='du'
   date='2020/1/25 14:30'
 */
-package parser
+package cnblogs
 
 import (
 	"golang20200117/crawler/engine"
