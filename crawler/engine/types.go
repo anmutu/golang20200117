@@ -8,6 +8,7 @@ package engine
 type Request struct {
 	Url        string
 	ParserFunc func([]byte) ParseResult
+	//Parser Parser
 }
 
 //返回的结构体，其中"interface{}"表示任何表示任何类型，有点类似c#里的泛型T
@@ -25,4 +26,23 @@ type Item struct {
 
 func NilParser([]byte) ParseResult {
 	return ParseResult{}
+}
+
+type ParserFunc func(contents []byte, url string) ParseResult
+
+type FuncParser struct {
+	parser ParserFunc
+	name   string
+}
+
+type Parser interface {
+	Parse(contents []byte, url string) ParseResult
+	Serialize() (name string, args interface{})
+}
+
+func NewFuncParser(p ParserFunc, name string) *FuncParser {
+	return &FuncParser{
+		parser: p,
+		name:   name,
+	}
 }

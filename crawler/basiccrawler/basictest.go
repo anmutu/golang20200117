@@ -7,14 +7,16 @@ package main
 import (
 	"fmt"
 	"golang20200117/crawler/engine"
-	"golang20200117/crawler/parser"
+	"golang20200117/crawler/parser/cnblogs"
+	"golang20200117/crawler/parser/xcar"
 	"io/ioutil"
 	"net/http"
 	"regexp"
 )
 
 func main() {
-	profileList()
+	carBrandList()
+	//profileList()
 	//cnblogsTest()
 }
 
@@ -53,6 +55,15 @@ func profileList() {
 	e := engine.SimpleEngine{}
 	e.Run(engine.Request{
 		Url:        "https://www.cnblogs.com",
-		ParserFunc: parser.ParseProfileList,
+		ParserFunc: cnblogs.ParseProfileList,
 	})
+}
+
+func carBrandList() {
+	e := engine.SimpleEngine{}
+	e.Run(engine.Request{
+		Url:        "http://newcar.xcar.com.cn",
+		ParserFunc: xcar.ParseCarList,
+	})
+
 }

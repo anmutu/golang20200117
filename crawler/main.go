@@ -7,7 +7,7 @@ package main
 import (
 	"golang20200117/crawler/engine"
 	"golang20200117/crawler/engine/simpleconcurrent"
-	"golang20200117/crawler/parser"
+	"golang20200117/crawler/parser/cnblogs"
 	"golang20200117/crawler/persist"
 	"golang20200117/crawler/scheduler"
 	"golang20200117/crawler/scheduler/simplescheduler"
@@ -27,7 +27,7 @@ func concurrentBlogList() {
 	}
 	e.Run(engine.Request{
 		Url:        "https://www.cnblogs.com",
-		ParserFunc: parser.ParseBlogList,
+		ParserFunc: cnblogs.ParseBlogList,
 	})
 }
 
@@ -36,7 +36,7 @@ func singleTask() {
 	e := engine.SimpleEngine{}
 	e.Run(engine.Request{
 		Url:        "https://www.cnblogs.com",
-		ParserFunc: parser.ParseBlogList,
+		ParserFunc: cnblogs.ParseBlogList,
 	})
 }
 
@@ -48,6 +48,6 @@ func simpleConcurrent() {
 	}
 	e.Run(engine.Request{
 		Url:        "https://www.cnblogs.com",
-		ParserFunc: parser.ParseBlogList,
+		ParserFunc: cnblogs.ParseBlogList,
 	})
 }

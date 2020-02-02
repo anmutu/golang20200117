@@ -6,6 +6,7 @@ package persist
 
 import (
 	"context"
+	"fmt"
 	"github.com/olivere/elastic/v7"
 	"log"
 )
@@ -17,7 +18,7 @@ func ItemSaver() chan interface{} {
 		for {
 			item := <-out
 			log.Printf("ItemSaver得到#%d,%v", itemCount, item)
-			_, err := save(item)
+			_, err := Save(item)
 			if err != nil {
 				log.Printf("ItemSaver:存储%v时出错，错误为%v", item, err)
 			}
@@ -26,7 +27,7 @@ func ItemSaver() chan interface{} {
 	return out
 }
 
-func save(item interface{}) (id string, err error) {
+func Save(item interface{}) (id string, err error) {
 	client, err := elastic.NewClient(elastic.SetSniff(false))
 	if err != nil {
 		return "", err
@@ -40,5 +41,7 @@ func save(item interface{}) (id string, err error) {
 	if err != nil {
 		return "", err
 	}
+	fmt.Printf("%+v", resp)
+	fmt.Print(1)
 	return resp.Id, nil
 }
