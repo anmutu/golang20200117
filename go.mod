@@ -3,6 +3,7 @@ module golang20200117
 go 1.13
 
 require (
+	github.com/garyburd/redigo v1.6.0 // indirect
 	github.com/gin-gonic/gin v1.5.0 // indirect
 	github.com/olivere/elastic/v7 v7.0.10
 	go.uber.org/zap v1.13.0 // indirect
