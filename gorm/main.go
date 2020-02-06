@@ -23,11 +23,8 @@ func main() {
 	//创建
 	db.Create(&User{Name: "du", Age: 18})
 
-	//读取
-	//var user User
-	//db.First(&user,1)
-
 	//删除
+	var user User
 	db.Delete(&user, 1)
 
 }
