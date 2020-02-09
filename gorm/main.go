@@ -5,6 +5,7 @@
 package main
 
 import (
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"log"
@@ -23,8 +24,10 @@ func main() {
 	//创建
 	db.Create(&User{Name: "du", Age: 18})
 
-	//删除
 	var user User
+	db.First(&user)
+	fmt.Printf("查出的结果为%v\n", user)
+
 	db.Delete(&user, 1)
 
 }
