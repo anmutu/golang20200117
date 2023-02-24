@@ -9,6 +9,6 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/olivere/elastic/v7 v7.0.10
 	go.uber.org/zap v1.13.0
-	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa
-	golang.org/x/text v0.3.2
+	golang.org/x/net v0.7.0
+	golang.org/x/text v0.7.0
 )
